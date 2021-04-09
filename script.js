@@ -1,11 +1,12 @@
 const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+
 const searchForm = document.querySelector('.search-form');
 const searchInput = document.querySelector('#search');
 const searchSuggestions = document.querySelector('.search-suggestions');
 const searchInfo = document.querySelector('.search-info');
 const searchMap = document.querySelector('#search-map');
 
-const cities = [];
+const cities = [];  // Retrived data from json file
 
 window.addEventListener('DOMContentLoaded', async () => {
 
@@ -17,24 +18,24 @@ window.addEventListener('DOMContentLoaded', async () => {
 
 /* Search Form */
 
-const findMatches = (wordToMatch, cities) => {
+const findMatches = (wordToMatch, cities) => {  // Filter through json to find city or state user typed
 
     return cities.filter(place => {
 
-        const regex = new RegExp(wordToMatch, 'gi');
+        const regex = new RegExp(wordToMatch, 'gi');  // Regexp - globally and case insensitive
         return place.city.match(regex) || place.state.match(regex);
 
     });
 
 };
 
-function displayMatches() {
+function displayMatches() {  
     const matchArray = findMatches(this.value, cities);
 
     const html = matchArray.map(place => {
-        const regex = new RegExp(this.value, 'gi');
-        const cityName = place.city.replace(regex, `<span class="hl">${this.value}</span>`);
-        const cityState = place.state.replace(regex, `<span class="hl">${this.value}</span>`);
+        const regex = new RegExp(this.value, 'gi'); // Regexp - globally and case insensitive
+        const cityName = place.city.replace(regex, `<span class="hl">${this.value}</span>`); // Highlighted city name in list
+        const cityState = place.state.replace(regex, `<span class="hl">${this.value}</span>`); // Highlighted state name in list
 
         return `
             <li onClick="updateCity(${place.rank})">
@@ -64,14 +65,14 @@ searchInput.addEventListener('keyup', removeSuggestions);
 
 /* Update UI */
 
-function numberWithCommas(x) {
+function numberWithCommas(x) {  // Regexp function which adds commas in numbers
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
-const updateCity = id => {
-    const place = cities.find(item => item.rank == id);
+const updateCity = id => { // Update city info div
+    const place = cities.find(item => item.rank == id);  // Find city in json file via id
 
-    const html = `
+    const html = `// City info div
             <div class="search-info-top">
                 <h2 class="search-info-city">${place.city}</h2>
                 <h2 class="search-info-state">${place.state}</h2>
@@ -96,8 +97,8 @@ const updateCity = id => {
             </ul>
     `;
 
-    marker.setLatLng([place.latitude, place.longitude]);
-    mymap.setView([place.latitude, place.longitude], 4);
+    marker.setLatLng([place.latitude, place.longitude]);  // Update Leaflet
+    mymap.setView([place.latitude, place.longitude], 4); // Update Leaflet
     searchMap.style.opacity = 1;
    
     searchInfo.innerHTML = html;
@@ -110,7 +111,7 @@ const updateCity = id => {
 /* End of Update UI */
 
 /* Search Map */
-
+// Leaflet library for interactive maps
 const mymap = L.map('search-map').setView([0, 0], 1);
 const marker = L.marker([37.0902, 95.7129]).addTo(mymap);
 
