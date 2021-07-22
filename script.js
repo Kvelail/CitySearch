@@ -71,8 +71,8 @@ function numberWithCommas(x) {  // Regexp function which adds commas in numbers
 
 const updateCity = id => { // Update city info div
     const place = cities.find(item => item.rank == id);  // Find city in json file via id
-
-    const html = `// City info div
+// City info div
+    const html = `
             <div class="search-info-top">
                 <h2 class="search-info-city">${place.city}</h2>
                 <h2 class="search-info-state">${place.state}</h2>
